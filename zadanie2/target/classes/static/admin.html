@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+    <style>
+        td{
+            border: solid 1px red;
+        }
+    </style>
+</head>
+<body>
+<button id="generuj">Generuj losowo</button>
+<a href="faktury.html"><button>Generuj faktury</button></a>
+<table id="table"></table>
+<script>
+    const table = document.querySelector("#table")
+
+    window.onload = async function () {
+        const table = document.querySelector("#table")
+        let x = await getData()
+        console.log(x)
+        let json = JSON.parse(x)
+       gen(json)
+    }
+
+    document.getElementById("generuj").addEventListener("click", async function () {
+        let res = await fetchGeneruj()
+        let json = JSON.parse(res)
+        console.log(json)
+
+        gen(json)
+        // console.log(JSON.stringify(json, null, 5))
+
+    })
+
+    function gen (json){
+        console.log(json)
+
+        for (let i = 0; i < json.length ; i++){
+            let row = document.createElement("tr")
+            table.append(row)
+            let cell = document.createElement("td")
+            cell.innerHTML = i+1
+            row.append(cell)
+            let cell2 = document.createElement("td")
+            cell2.innerHTML = json[i].uuid
+            row.append(cell2)
+            let cell3 = document.createElement("td")
+            cell3.innerHTML = json[i].model
+            row.append(cell3)
+            let cell5 = document.createElement("td")
+            row.append(cell5)
+            let cell6 = document.createElement("td")
+            cell6.bgColor = json[i].kolor
+            cell6.width = 15
+            row.append(cell6)
+            let cell7 = document.createElement("td")
+            row.append(cell7)
+            let cell4 = document.createElement("td")
+            let butt4 = document.createElement("button")
+            let cell9 = document.createElement("td")
+            let butt9 = document.createElement("button")
+            cell9.append(butt9)
+            butt4.id = json[i].uuid
+            butt4.innerHTML = "generuj fakturę"
+            butt4.onclick = async function (event){
+              let result =  await fetchFaktura(event.target.id)
+                console.log(result)
+
+            }
+            cell4.appendChild(butt4)
+            row.appendChild(cell4)
+            let cell8 = document.createElement("td")
+            row.append(cell8)
+        }
+    }
+
+    fetchGeneruj = async () => {
+
+        const options = {
+            method: "POST",
+        };
+
+        let response = await fetch("/generuj", options)
+
+        if (!response.ok)
+            return response.status
+        else
+            return await response.text() // response.json
+
+    }
+    fetchAll = async (uuid) => {
+
+        const options = {
+            method: "POST",
+            body: uuid
+        };
+
+        let response = await fetch("/genAll", options)
+
+        if (!response.ok)
+            return response.status
+        else
+            return await response.text() // response.json
+
+    }
+
+    fetchGeneruj = async () => {
+
+        const options = {
+            method: "POST",
+        };
+
+        let response = await fetch("/generuj", options)
+
+        if (!response.ok)
+            return response.status
+        else
+            return await response.text() // response.json
+
+    }
+    fetchFaktura = async (uuid) => {
+
+        const options = {
+            method: "POST",
+            body: uuid
+        };
+
+        let response = await fetch("/faktura", options)
+
+        if (!response.ok)
+            return response.status
+        else
+            return await response.text() // response.json
+
+    }
+
+    getData = async () => {
+
+        const options = {
+            method: "POST",
+        };
+
+        let response = await fetch("/getlist", options)
+
+        if (!response.ok)
+            return response.status
+        else
+            return response.text()
+    }
+
+
+</script>
+</body>
+</html>

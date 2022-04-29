@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cars</title>
+</head>
+<body>
+<div>
+
+    <br>
+    <label>model:</label><br/>
+    <input type="text" id="model">
+    <label>rok</label><br/>
+    <select id="rok">
+        <option value="2001">2001</option>
+        <option value="2002">2002</option>
+        <option value="2003">2003</option>
+        <option value="2004">2004</option>
+    </select><br/>
+    <label>poduszki powietrzne: kierowca| pasażer | tylna kanapa | boczne z tyłu: |</label><br/>
+    <input type="checkbox" id="kierowca" name="airbags">
+    <input type="checkbox" id="pasazer" name="airbags">
+    <input type="checkbox" id="kanapa" name="airbags">
+    <input type="checkbox" id="boczne" name="airbags">
+    <br/>
+    <input type="color" id="kolor"><br/>
+    <button id="button">tekst</button>
+    <a href="admin.html">admin</a><br/>
+    <br/>
+
+
+    <script defer>
+        // const but = document.querySelector("#kolor")
+        // console.log(but)
+        // but.onclick = function (){console.log("xyz")}
+        fetchPostAsync = async () => {
+
+            const data = JSON.stringify({
+                model: document.querySelector("#model").value,
+                rok: document.querySelector("#rok").value,
+                poduszki: [
+                    {description: "kierowca", value: document.querySelector("#kierowca").checked},
+                    {description: "pasazer", value: document.querySelector("#pasazer").checked},
+                    {description: "kanapa", value: document.querySelector("#kanapa").checked},
+                    {description: "boczne", value: document.querySelector("#boczne").checked}
+                ],
+                kolor: document.querySelector("#kolor").value
+            })
+
+            const options = {
+                method: "POST",
+                body: data,
+            };
+
+            let response = await fetch("/add", options)
+
+            if (!response.ok)
+                return response.status
+            else
+                return await response.text() // response.json
+
+        }
+
+        document.getElementById("button").onclick = async () => {
+            let result = await fetchPostAsync()
+            let json = JSON.parse(result)
+            alert(JSON.stringify(json, null, 5))
+        }
+
+        // do generowania
+
+
+
+
+    </script>
+
+</div>
+</body>
+</html>
